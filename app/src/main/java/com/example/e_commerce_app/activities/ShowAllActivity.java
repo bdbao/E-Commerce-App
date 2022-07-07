@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 
 import com.example.e_commerce_app.R;
 import com.example.e_commerce_app.adapters.ShowAllAdapter;
@@ -35,8 +37,14 @@ public class ShowAllActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        String type =  getIntent().getStringExtra("type");
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View v) {
+                finish();
+            }
+        });
 
+        String type =  getIntent().getStringExtra("type");
         firestore = FirebaseFirestore.getInstance();
 
         recyclerView = findViewById(R.id.show_all_rec);
@@ -53,6 +61,7 @@ public class ShowAllActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if(task.isSuccessful()){
+                                Log.d("number of loaded doc", "onComplete: "+String.valueOf(task.getResult().size()));
                                 for(DocumentSnapshot doc : task.getResult().getDocuments()){
                                     ShowAllModel showAllModel = doc.toObject(ShowAllModel.class);
                                     showAllModelList.add(showAllModel);
@@ -81,7 +90,7 @@ public class ShowAllActivity extends AppCompatActivity {
 
         }
         //women
-        if(type != null && type.equalsIgnoreCase("women")){
+        if(type != null && type.equalsIgnoreCase("woman")){
             firestore.collection("ShowAll").whereEqualTo("type","women")
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -100,7 +109,7 @@ public class ShowAllActivity extends AppCompatActivity {
         }
         //kids
         if(type != null && type.equalsIgnoreCase("kids")){
-            firestore.collection("ShowAll").whereEqualTo("type","kids")
+            firestore.collection("ShowAll").whereEqualTo("type","kid")
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
@@ -116,7 +125,7 @@ public class ShowAllActivity extends AppCompatActivity {
                     });
 
         }
-        if(type != null && type.equalsIgnoreCase("shoe")){
+        if(type != null && type.equalsIgnoreCase("shoes")){
             firestore.collection("ShowAll").whereEqualTo("type","shoe")
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -151,7 +160,7 @@ public class ShowAllActivity extends AppCompatActivity {
 
         }
         if(type != null && type.equalsIgnoreCase("camera")){
-            firestore.collection("ShowAll").whereEqualTo("type","Camera")
+            firestore.collection("ShowAll").whereEqualTo("type","camera")
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
